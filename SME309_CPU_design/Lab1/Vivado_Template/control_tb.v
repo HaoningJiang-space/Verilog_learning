@@ -37,26 +37,27 @@ end
 
 initial begin
     pause = 0; speedup = 0; speeddown = 0;
+    $display("Testbench started at time %0t", $time);
 
-    // 先让系统运行短时间，观察地址递增
-    #2000;   // 2μs，应该能看到10次地址变化
-
-    // 测试暂停功能
-    pause = 1;
-    #500;    // 暂停0.5μs
-    pause = 0;
-
-    // 继续运行
-    #2000;   // 再运行2μs
-
-    // 测试加速功能
+    // 运行500ns
+    #500;
+    $display("Time %0t: Testing speedup", $time);
     speedup = 1;
-    #200;    // 200ns
+
+    #200;
+    $display("Time %0t: Stopping speedup", $time);
     speedup = 0;
 
-    // 观察加速后的效果
-    #2000;   // 2μs
+    #300;
+    $display("Time %0t: Testing pause", $time);
+    pause = 1;
 
+    #200;
+    $display("Time %0t: Stopping pause", $time);
+    pause = 0;
+
+    #300;
+    $display("Time %0t: Finishing simulation", $time);
     $finish;
 end
         
