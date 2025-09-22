@@ -24,6 +24,8 @@ end
 
 // Initialize instruction memory
 initial begin
+    integer i;  // 将变量声明移到块的开始
+
     // Real instruction data from .s file
     instr_mem[0]  = 32'hE3A00000;  // MOV instruction
     instr_mem[1]  = 32'hE1A0100F;  // MOV instruction
@@ -39,7 +41,6 @@ initial begin
     instr_mem[11] = 32'hEAFFFFFE;  // B instruction (infinite loop)
 
     // Initialize remaining instruction memory to zero
-    integer i;
     for (i = 12; i < 128; i = i + 1) begin
         instr_mem[i] = 32'h0;
     end
@@ -47,12 +48,13 @@ end
 
 // Initialize data memory
 initial begin
+    integer j;  // 将变量声明移到块的开始
+
     // Real data from .s file
     data_mem[0] = 32'h00000800;  // Data constant 1
     data_mem[1] = 32'hABCD1234;  // Data constant 2
 
     // Initialize remaining data memory to zero as required
-    integer j;
     for (j = 2; j < 128; j = j + 1) begin
         data_mem[j] = 32'h00000000;
     end
