@@ -39,35 +39,15 @@ always @(posedge clk) begin
     speeddown_prev <= speeddown;
 end
 
-// Speed state machine
+// Speed state machine - 基于按钮电平
 always @(*) begin
-    case (speed_state)
-        NORMAL: begin
-            if (speedup_edge)
-                next_speed_state = HIGH;
-            else if (speeddown_edge)
-                next_speed_state = LOW;
-            else
-                next_speed_state = NORMAL;
-        end
-        HIGH: begin
-            if (speedup_edge)
-                next_speed_state = NORMAL;
-            else if (speeddown_edge)
-                next_speed_state = NORMAL;
-            else
-                next_speed_state = HIGH;
-        end
-        LOW: begin
-            if (speedup_edge)
-                next_speed_state = NORMAL;
-            else if (speeddown_edge)
-                next_speed_state = NORMAL;
-            else
-                next_speed_state = LOW;
-        end
-        default: next_speed_state = NORMAL;
-    endcase
+    if (speedup) begin
+        next_speed_state = HIGH;
+    end else if (speeddown) begin
+        next_speed_state = LOW;
+    end else begin
+        next_speed_state = NORMAL;
+    end
 end
 
 // Set speed threshold based on state
