@@ -71,10 +71,10 @@ always @(*) begin
 end
 
 // Set speed threshold based on state
-assign speed_threshold = (speed_state == NORMAL) ? 10 :             // 仿真用：10个时钟周期 (~1us)
-                        (speed_state == HIGH)   ? 5 :              // 仿真用：5个时钟周期 (~0.5us)
-                        (speed_state == LOW)    ? 40 :             // 仿真用：40个时钟周期 (~4us)
-                                                 10;
+assign speed_threshold = (speed_state == NORMAL) ? 2 :              // 仿真用：2个时钟周期 (~200ns)
+                        (speed_state == HIGH)   ? 1 :              // 仿真用：1个时钟周期 (~100ns)
+                        (speed_state == LOW)    ? 8 :              // 仿真用：8个时钟周期 (~800ns)
+                                                 2;
 
 // Main control logic
 always @(posedge clk) begin
@@ -140,6 +140,10 @@ end
 always @(posedge clk) begin
     if (counter == 0) begin
         $display("Time %0t: Counter reset, about to increment address", $time);
+    end
+    if (counter == 5) begin
+        $display("Time %0t: Counter=%0d, speed_threshold=%0d, speed_state=%0d",
+                 $time, counter, speed_threshold, speed_state);
     end
 end
 
