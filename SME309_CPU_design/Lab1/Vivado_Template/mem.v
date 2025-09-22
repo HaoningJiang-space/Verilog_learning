@@ -11,14 +11,14 @@ module mem(
 reg [31:0] instr_mem [0:127];  // Instruction ROM
 reg [31:0] data_mem [0:127];   // Data ROM
 
-// Memory read operation
-always @(posedge clk) begin
+// Memory read operation - 异步读取
+always @(*) begin
     if (addr[7] == 0) begin
         // Access instruction memory when addr[7] = 0
-        data <= instr_mem[addr[6:0]];
+        data = instr_mem[addr[6:0]];
     end else begin
         // Access data memory when addr[7] = 1
-        data <= data_mem[addr[6:0]];
+        data = data_mem[addr[6:0]];
     end
 end
 
