@@ -13,7 +13,16 @@ wire [6:0] cathode;
 wire dp;
 wire [7:0] led;
 
-top dut(clk, pause, speedup, speeddown, anode, cathode, dp, led);
+top dut(
+    .btn_p(pause),
+    .btn_spdup(speedup),
+    .btn_spddn(speeddown),
+    .clk(clk),
+    .anode(anode),
+    .cathode(cathode),
+    .dp(dp),
+    .led(led)
+);
 
 initial begin
     clk = 0;
