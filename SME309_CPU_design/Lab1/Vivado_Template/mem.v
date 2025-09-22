@@ -23,8 +23,8 @@ always @(posedge clk) begin
 end
 
 // Initialize instruction memory
-initial begin
-    integer i;  // 将变量声明移到块的开始
+initial begin : init_instr_mem
+    integer i;
 
     // Real instruction data from .s file
     instr_mem[0]  = 32'hE3A00000;  // MOV instruction
@@ -47,8 +47,8 @@ initial begin
 end
 
 // Initialize data memory
-initial begin
-    integer j;  // 将变量声明移到块的开始
+initial begin : init_data_mem
+    integer j;
 
     // Real data from .s file
     data_mem[0] = 32'h00000800;  // Data constant 1
