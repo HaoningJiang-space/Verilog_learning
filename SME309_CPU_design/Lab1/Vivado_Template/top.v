@@ -17,14 +17,30 @@ wire [31:0] data;
 // Control module generates 8-bit address
 // addr[7] = 0 for instruction memory, addr[7] = 1 for data memory
 // addr[6:0] = actual memory address (0-127)
-control ctrl(clk, btn_p, btn_spdup, btn_spddn, addr);
+control ctrl(
+    .clk(clk),
+    .pause(btn_p),
+    .speedup(btn_spdup),
+    .speeddown(btn_spddn),
+    .addr(addr)
+);
 
 // Memory module contains both instruction and data ROM
 // Uses addr[7] to select between them
-mem memory(clk, addr, data);
+mem memory(
+    .clk(clk),
+    .addr(addr),
+    .data(data)
+);
 
 // Seven-segment display shows memory content
-Seven_Seg ss(clk, data, anode, dp, cathode);
+Seven_Seg ss(
+    .clk(clk),
+    .data(data),
+    .anode(anode),
+    .dp(dp),
+    .cathode(cathode)
+);
 
 // LED display shows current address
 assign led = addr;
