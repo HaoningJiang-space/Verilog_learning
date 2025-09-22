@@ -58,7 +58,12 @@ assign speed_threshold = (speed_state == NORMAL) ? 4 :
 
 // Main control logic
 always @(posedge clk) begin
-    // Update speed state first
+    // Reset counter when speed changes to ensure immediate effect
+    if (speed_state != next_speed_state) begin
+        counter <= 0;
+    end
+
+    // Update speed state after checking for changes
     speed_state <= next_speed_state;
 
     // Handle pause
@@ -68,7 +73,7 @@ always @(posedge clk) begin
 
     // Address generation when not paused
     if (!paused) begin
-        // Use current speed_threshold (which reflects current speed_state)
+        // Use current speed_threshold
         if (counter >= speed_threshold - 1) begin
             counter <= 0;
 
@@ -89,11 +94,6 @@ always @(posedge clk) begin
         end else begin
             counter <= counter + 1;
         end
-    end
-
-    // Reset counter when speed changes to ensure immediate effect
-    if (speed_state != next_speed_state) begin
-        counter <= 0;
     end
 end
 
