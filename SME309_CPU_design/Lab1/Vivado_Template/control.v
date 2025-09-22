@@ -88,9 +88,7 @@ always @(posedge clk) begin
 
     // Address generation when not paused
     if (!paused) begin
-        counter <= counter + 1;
-
-        if (counter >= speed_threshold) begin
+        if (counter >= speed_threshold - 1) begin
             counter <= 0;
 
             // Increment memory address
@@ -107,6 +105,8 @@ always @(posedge clk) begin
             end else begin
                 mem_addr <= mem_addr + 1;
             end
+        end else begin
+            counter <= counter + 1;
         end
     end
 end
