@@ -39,7 +39,7 @@ always @(posedge clk) begin
     speeddown_prev <= speeddown;
 end
 
-// Speed state machine - 基于按钮电平
+
 always @(*) begin
     if (speedup) begin
         next_speed_state = HIGH;
@@ -51,9 +51,9 @@ always @(*) begin
 end
 
 // Set speed threshold based on state (4x relationship)
-assign speed_threshold = (speed_state == NORMAL) ? 4 :              // 仿真用：4个时钟周期 (1 word/sec baseline)
-                        (speed_state == HIGH)   ? 1 :              // 仿真用：1个时钟周期 (4 words/sec, 4倍快)
-                        (speed_state == LOW)    ? 16 :             // 仿真用：16个时钟周期 (0.25 words/sec, 4倍慢)
+assign speed_threshold = (speed_state == NORMAL) ? 4 :             
+                        (speed_state == HIGH)   ? 1 :             
+                        (speed_state == LOW)    ? 16 :            
                                                  4;
 
 // Main control logic
@@ -111,13 +111,13 @@ initial begin
     speedup_prev = 0;
     speeddown_prev = 0;
 
-    // 调试信息
+
     $display("Control module initialized at time %0t", $time);
     $display("Initial values: speed_state=%0d, mem_select=%0d, mem_addr=%0d",
              speed_state, mem_select, mem_addr);
 end
 
-// 调试监控器
+
 always @(addr) begin
     $display("Time %0t: addr changed to %h (mem_select=%0d, mem_addr=%0d)",
              $time, addr, mem_select, mem_addr);
