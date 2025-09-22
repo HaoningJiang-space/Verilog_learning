@@ -116,14 +116,14 @@ assign addr = {mem_select, mem_addr};
 
 // Initialize
 initial begin
-    speed_state <= NORMAL;
-    counter <= 0;
-    paused <= 0;
-    mem_select <= 0;
-    mem_addr <= 0;
-    pause_prev <= 0;
-    speedup_prev <= 0;
-    speeddown_prev <= 0;
+    speed_state = NORMAL;
+    counter = 0;
+    paused = 0;
+    mem_select = 0;
+    mem_addr = 0;
+    pause_prev = 0;
+    speedup_prev = 0;
+    speeddown_prev = 0;
 end
 
 endmodule
