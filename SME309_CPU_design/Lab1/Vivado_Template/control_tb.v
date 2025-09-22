@@ -37,12 +37,27 @@ end
 
 initial begin
     pause = 0; speedup = 0; speeddown = 0;
-    #1650 pause = 1;
-    #3200 pause = 0;
-    #500 speedup = 1;
-    #1600 pause = 1;
-    #1600 speedup = 0; pause = 0;
-    #3200 $finish;
+
+    // 先让系统正常运行一段时间，观察地址递增
+    #20000;  // 20μs，可以看到多次地址变化
+
+    // 然后测试暂停功能
+    pause = 1;
+    #2000;   // 暂停2μs
+    pause = 0;
+
+    // 继续运行
+    #10000;  // 再运行10μs
+
+    // 测试加速功能
+    speedup = 1;
+    #1000;
+    speedup = 0;
+
+    // 观察加速后的效果
+    #10000;  // 10μs
+
+    $finish;
 end
         
 initial begin
