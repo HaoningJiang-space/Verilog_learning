@@ -71,10 +71,10 @@ always @(*) begin
 end
 
 // Set speed threshold based on state
-assign speed_threshold = (speed_state == NORMAL) ? 1000 :           // 仿真用：1000个时钟周期 (~10us)
-                        (speed_state == HIGH)   ? 250 :            // 仿真用：250个时钟周期 (~2.5us)
-                        (speed_state == LOW)    ? 4000 :           // 仿真用：4000个时钟周期 (~40us)
-                                                 1000;
+assign speed_threshold = (speed_state == NORMAL) ? 100 :            // 仿真用：100个时钟周期 (~10us)
+                        (speed_state == HIGH)   ? 25 :             // 仿真用：25个时钟周期 (~2.5us)
+                        (speed_state == LOW)    ? 400 :            // 仿真用：400个时钟周期 (~40us)
+                                                 100;
 
 // Main control logic
 always @(posedge clk) begin
