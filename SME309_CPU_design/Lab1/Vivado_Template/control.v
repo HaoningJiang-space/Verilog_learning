@@ -73,10 +73,10 @@ end
 // Set speed threshold based on state
 always @(*) begin
     case (speed_state)
-        NORMAL: speed_threshold = 100_000_000;     // 1 second at 100MHz
-        HIGH:   speed_threshold = 25_000_000;      // 0.25 second at 100MHz (4 words/sec)
-        LOW:    speed_threshold = 400_000_000;     // 4 seconds at 100MHz (0.25 words/sec)
-        default: speed_threshold = 100_000_000;
+        NORMAL: speed_threshold = 1000;           // 仿真用：1000个时钟周期 (~10us)
+        HIGH:   speed_threshold = 250;            // 仿真用：250个时钟周期 (~2.5us)
+        LOW:    speed_threshold = 4000;           // 仿真用：4000个时钟周期 (~40us)
+        default: speed_threshold = 1000;
     endcase
 end
 
