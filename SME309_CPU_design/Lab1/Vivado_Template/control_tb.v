@@ -39,32 +39,32 @@ initial begin
     pause = 0; speedup = 0; speeddown = 0;
     $display("Testbench started at time %0t", $time);
 
-    // 正常运行400ns
-    #400;
-    $display("Time %0t: Testing speedup", $time);
-    speedup = 1;
-
-    #200;
-    $display("Time %0t: Stopping speedup", $time);
-    speedup = 0;
-
-    #200;
+    // 简化测试，提前测试speeddown
+    #150;
     $display("Time %0t: Testing speeddown", $time);
     speeddown = 1;
 
-    #400;
+    #300;
     $display("Time %0t: Stopping speeddown", $time);
     speeddown = 0;
 
-    #200;
+    #150;
+    $display("Time %0t: Testing speedup", $time);
+    speedup = 1;
+
+    #150;
+    $display("Time %0t: Stopping speedup", $time);
+    speedup = 0;
+
+    #150;
     $display("Time %0t: Testing pause", $time);
     pause = 1;
 
-    #200;
+    #100;
     $display("Time %0t: Stopping pause", $time);
     pause = 0;
 
-    #400;
+    #100;
     $display("Time %0t: Finishing simulation", $time);
     $finish;
 end
