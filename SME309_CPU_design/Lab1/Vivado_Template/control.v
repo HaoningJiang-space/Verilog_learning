@@ -124,6 +124,23 @@ initial begin
     pause_prev = 0;
     speedup_prev = 0;
     speeddown_prev = 0;
+
+    // 调试信息
+    $display("Control module initialized at time %0t", $time);
+    $display("Initial values: speed_state=%0d, mem_select=%0d, mem_addr=%0d",
+             speed_state, mem_select, mem_addr);
+end
+
+// 调试监控器
+always @(addr) begin
+    $display("Time %0t: addr changed to %h (mem_select=%0d, mem_addr=%0d)",
+             $time, addr, mem_select, mem_addr);
+end
+
+always @(posedge clk) begin
+    if (counter == 0) begin
+        $display("Time %0t: Counter reset, about to increment address", $time);
+    end
 end
 
 endmodule

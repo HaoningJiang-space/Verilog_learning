@@ -6,12 +6,14 @@ reg clk;
 reg pause;
 reg speedup;
 reg speeddown;
-wire [7:0] addr;
-wire [31:0] data;
 wire [7:0] anode;
 wire [6:0] cathode;
 wire dp;
 wire [7:0] led;
+
+
+wire [7:0] addr;
+wire [31:0] data;
 
 top dut(
     .btn_p(pause),
@@ -23,6 +25,10 @@ top dut(
     .dp(dp),
     .led(led)
 );
+
+// 连接内部信号用于观察
+assign addr = dut.addr;
+assign data = dut.data;
 
 initial begin
     clk = 0;
