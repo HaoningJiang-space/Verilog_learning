@@ -18,7 +18,7 @@ reg [1:0] next_speed_state;
 
 // Clock dividers for different speeds
 reg [31:0] counter;
-reg [31:0] speed_threshold;
+wire [31:0] speed_threshold;
 
 // Button edge detection
 reg pause_prev, speedup_prev, speeddown_prev;
@@ -71,14 +71,10 @@ always @(*) begin
 end
 
 // Set speed threshold based on state
-always @(*) begin
-    case (speed_state)
-        NORMAL: speed_threshold = 1000;           // 仿真用：1000个时钟周期 (~10us)
-        HIGH:   speed_threshold = 250;            // 仿真用：250个时钟周期 (~2.5us)
-        LOW:    speed_threshold = 4000;           // 仿真用：4000个时钟周期 (~40us)
-        default: speed_threshold = 1000;
-    endcase
-end
+assign speed_threshold = (speed_state == NORMAL) ? 1000 :           // 仿真用：1000个时钟周期 (~10us)
+                        (speed_state == HIGH)   ? 250 :            // 仿真用：250个时钟周期 (~2.5us)
+                        (speed_state == LOW)    ? 4000 :           // 仿真用：4000个时钟周期 (~40us)
+                                                 1000;
 
 // Main control logic
 always @(posedge clk) begin
