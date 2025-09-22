@@ -5,7 +5,7 @@ module control(
     input pause,        // high when pressed down
     input speedup,      // high when pressed down
     input speeddown,    // high when pressed down
-    output reg [7:0] addr
+    output [7:0] addr
 );
 
 // Speed states
@@ -116,9 +116,7 @@ always @(posedge clk) begin
 end
 
 // Combine memory select and address for output
-always @(*) begin
-    addr = {mem_select, mem_addr};
-end
+assign addr = {mem_select, mem_addr};
 
 // Initialize
 initial begin
