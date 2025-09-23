@@ -2,3 +2,6 @@ Running: xsim.dir/counter_tb_behav/xsimk.exe -simmode gui -wdb counter_tb_behav.
 Design successfully loaded
 Design Loading Memory Usage: 10664 KB (Peak: 10664 KB)
 Design Loading CPU Usage: 31 ms
+Simulation completed
+Simulation Memory Usage: 11480 KB (Peak: 11480 KB)
+Simulation CPU Usage: 46 ms
