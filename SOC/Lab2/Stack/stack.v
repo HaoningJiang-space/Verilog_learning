@@ -7,7 +7,7 @@ module stack #(
     input wire rst_n,
     input wire [DATA_WIDTH-1:0] d,
     input wire [1:0] op,
-    output reg [DATA_WIDTH-1:0] q [0:STACK_DEPTH-1],
+    output reg [DATA_WIDTH-1:0] q_top,
     output reg [ADDR_WIDTH-1:0] sp,
     output wire stack_full,
     output wire stack_empty
@@ -18,8 +18,11 @@ module stack #(
     localparam POP = 2'b10;
     localparam LOAD_PUSH = 2'b11;
 
+    reg [DATA_WIDTH-1:0] q [0:STACK_DEPTH-1];
+
     assign stack_full = (sp == STACK_DEPTH - 1);
     assign stack_empty = (sp == 0);
+    assign q_top = q[0];
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
