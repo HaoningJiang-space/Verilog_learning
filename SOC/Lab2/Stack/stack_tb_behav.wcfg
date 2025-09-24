@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="stack_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="stack_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="150.001 ns"></ZoomEndTime>
+      <Cursor1Time time="150.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="165"></NameColumnWidth>
+      <ValueColumnWidth column_width="69"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="15" />
+   <wvobject fp_name="/stack_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/rst_n" type="logic">
+      <obj_property name="ElementShortName">rst_n</obj_property>
+      <obj_property name="ObjectShortName">rst_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/d" type="array">
+      <obj_property name="ElementShortName">d[7:0]</obj_property>
+      <obj_property name="ObjectShortName">d[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/op" type="array">
+      <obj_property name="ElementShortName">op[1:0]</obj_property>
+      <obj_property name="ObjectShortName">op[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/q_top" type="array">
+      <obj_property name="ElementShortName">q_top[7:0]</obj_property>
+      <obj_property name="ObjectShortName">q_top[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/sp" type="array">
+      <obj_property name="ElementShortName">sp[1:0]</obj_property>
+      <obj_property name="ObjectShortName">sp[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/stack_full" type="logic">
+      <obj_property name="ElementShortName">stack_full</obj_property>
+      <obj_property name="ObjectShortName">stack_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/stack_empty" type="logic">
+      <obj_property name="ElementShortName">stack_empty</obj_property>
+      <obj_property name="ObjectShortName">stack_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/STACK_DEPTH" type="array">
+      <obj_property name="ElementShortName">STACK_DEPTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">STACK_DEPTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/ADDR_WIDTH" type="array">
+      <obj_property name="ElementShortName">ADDR_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ADDR_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/LOAD" type="array">
+      <obj_property name="ElementShortName">LOAD[1:0]</obj_property>
+      <obj_property name="ObjectShortName">LOAD[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/PUSH" type="array">
+      <obj_property name="ElementShortName">PUSH[1:0]</obj_property>
+      <obj_property name="ObjectShortName">PUSH[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/POP" type="array">
+      <obj_property name="ElementShortName">POP[1:0]</obj_property>
+      <obj_property name="ObjectShortName">POP[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/stack_tb/LOAD_PUSH" type="array">
+      <obj_property name="ElementShortName">LOAD_PUSH[1:0]</obj_property>
+      <obj_property name="ObjectShortName">LOAD_PUSH[1:0]</obj_property>
+   </wvobject>
+</wave_config>

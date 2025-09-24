@@ -1,0 +1,11 @@
+Time resolution is 1 ps
+=== Stack Operations Test ===
+Time	Op	Data	q_top	SP	Full	Empty
+30000	LOAD	aa	aa	0	0	1
+50000	PUSH	bb	bb	1	0	0
+70000	PUSH	cc	cc	3	1	0
+90000	POP	cc	bb	2	0	0
+110000	L&P	dd	dd	2	0	0
+130000	POP	dd	dd	2	0	0
+=== Test Complete ===
+$finish called at time : 150 ns : File "C:/A_MY_FILE/SME309_jhn/Verilog_learning/SOC/Lab2/Stack/stack_tb.v" Line 91
