@@ -10,7 +10,7 @@ module stack_tb();
     reg rst_n;
     reg [DATA_WIDTH-1:0] d;
     reg [1:0] op;
-    wire [DATA_WIDTH-1:0] q [0:STACK_DEPTH-1];
+    wire [DATA_WIDTH-1:0] q_top;
     wire [ADDR_WIDTH-1:0] sp;
     wire stack_full;
     wire stack_empty;
@@ -29,7 +29,7 @@ module stack_tb();
         .rst_n(rst_n),
         .d(d),
         .op(op),
-        .q(q),
+        .q_top(q_top),
         .sp(sp),
         .stack_full(stack_full),
         .stack_empty(stack_empty)
@@ -50,41 +50,41 @@ module stack_tb();
         rst_n = 1;
 
         $display("=== Stack Operations Test ===");
-        $display("Time\tOp\tData\tq[0]\tq[1]\tq[2]\tq[3]\tSP");
+        $display("Time\tOp\tData\tq_top\tSP\tFull\tEmpty");
 
         #10;
         d = 8'hAA;
         op = LOAD;
         #10;
-        $display("%0t\tLOAD\t%h\t%h\t%h\t%h\t%h\t%d", $time, d, q[0], q[1], q[2], q[3], sp);
+        $display("%0t\tLOAD\t%h\t%h\t%d\t%b\t%b", $time, d, q_top, sp, stack_full, stack_empty);
 
         #10;
         d = 8'hBB;
         op = PUSH;
         #10;
-        $display("%0t\tPUSH\t%h\t%h\t%h\t%h\t%h\t%d", $time, d, q[0], q[1], q[2], q[3], sp);
+        $display("%0t\tPUSH\t%h\t%h\t%d\t%b\t%b", $time, d, q_top, sp, stack_full, stack_empty);
 
         #10;
         d = 8'hCC;
         op = PUSH;
         #10;
-        $display("%0t\tPUSH\t%h\t%h\t%h\t%h\t%h\t%d", $time, d, q[0], q[1], q[2], q[3], sp);
+        $display("%0t\tPUSH\t%h\t%h\t%d\t%b\t%b", $time, d, q_top, sp, stack_full, stack_empty);
 
         #10;
         op = POP;
         #10;
-        $display("%0t\tPOP\t%h\t%h\t%h\t%h\t%h\t%d", $time, d, q[0], q[1], q[2], q[3], sp);
+        $display("%0t\tPOP\t%h\t%h\t%d\t%b\t%b", $time, d, q_top, sp, stack_full, stack_empty);
 
         #10;
         d = 8'hDD;
         op = LOAD_PUSH;
         #10;
-        $display("%0t\tL&P\t%h\t%h\t%h\t%h\t%h\t%d", $time, d, q[0], q[1], q[2], q[3], sp);
+        $display("%0t\tL&P\t%h\t%h\t%d\t%b\t%b", $time, d, q_top, sp, stack_full, stack_empty);
 
         #10;
         op = POP;
         #10;
-        $display("%0t\tPOP\t%h\t%h\t%h\t%h\t%h\t%d", $time, d, q[0], q[1], q[2], q[3], sp);
+        $display("%0t\tPOP\t%h\t%h\t%d\t%b\t%b", $time, d, q_top, sp, stack_full, stack_empty);
 
         #20;
         $display("=== Test Complete ===");
