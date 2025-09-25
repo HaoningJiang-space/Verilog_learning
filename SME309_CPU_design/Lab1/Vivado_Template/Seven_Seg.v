@@ -9,7 +9,7 @@ module Seven_Seg(
 );
 
 // Counter for display multiplexing (refresh rate control)
-reg [19:0] refresh_counter; // ~10ms refresh rate at 100MHz
+reg [19:0] refresh_counter; // ~1ms refresh rate at 100MHz
 wire [2:0] digit_select;
 
 // Extract current digit from refresh counter
