@@ -1,0 +1,6 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/A_MY_FILE/SME309_jhn/Verilog_learning/SOC/Lab2/HW2/state_machine.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module state_machine
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/A_MY_FILE/SME309_jhn/Verilog_learning/SOC/Lab2/HW2/state_machine_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module state_machine_tb
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/A_MY_FILE/SME309_jhn/Verilog_learning/SOC/Lab2/HW2/HW2.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
