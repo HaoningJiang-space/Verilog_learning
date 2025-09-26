@@ -109,5 +109,5 @@ module state_machine(
         else 
             state <= next_state;
         end
-    end
+
 endmodule
