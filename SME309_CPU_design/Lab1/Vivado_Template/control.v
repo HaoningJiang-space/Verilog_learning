@@ -118,8 +118,8 @@ module control(
     input clk,
     input pause,        // high when pressed down
     input speedup,      // high when pressed down
-    input speeddown,    // high when pressed down
-    output [7:0] addr
+    input sppeddn,      // high when pressed down
+    output [8:0] addr
 );
 //-------------------------------------------------------------
 // PARAMTER
@@ -142,8 +142,8 @@ module control(
     // wire pause_edge, speedup_edge, speeddown_edge;
 
   // Debounced button signals and flags
-    wire pause_flag, speedup_flag, speeddown_flag;
-    wire pause_state, speedup_state, speeddown_state;
+    wire pause_flag, speedup_flag, sppeddn_flag;
+    wire pause_state, speedup_state, sppeddn_state;
 
   // Pause control
     reg       paused     ;
@@ -173,12 +173,12 @@ module control(
         .key_state(speedup_state) // Current button state
     );
     
-    key_debounce speeddown_debounce(
+    key_debounce sppeddn_debounce(
         .clk(clk),
         .rst_n(1'b1),               // Always enabled
-        .key_in(speeddown),         // Raw button input
-        .key_flag(speeddown_flag),  // Event flag (press or release)
-        .key_state(speeddown_state) // Current button state
+        .key_in(sppeddn),           // Raw button input
+        .key_flag(sppeddn_flag),    // Event flag (press or release)
+        .key_state(sppeddn_state)   // Current button state
     );
 
 
@@ -201,7 +201,7 @@ module control(
         // end
         wire pause_edge = pause_flag && !pause_state;     // Only detect press events
         wire speedup_edge = speedup_flag && !speedup_state;   // Only detect press events
-        wire speeddown_edge = speeddown_flag && !speeddown_state; // Only detect press events
+        wire sppeddn_edge = sppeddn_flag && !sppeddn_state;   // Only detect press events
 
 
     //====================================================
@@ -218,7 +218,7 @@ module control(
                 NORMAL: begin
                     if (speedup_edge) begin
                         next_speed_state = HIGH;
-                    end else if (speeddown_edge) begin
+                    end else if (sppeddn_edge) begin
                         next_speed_state = LOW;
                     end else begin
                         next_speed_state = NORMAL;
@@ -227,7 +227,7 @@ module control(
                 HIGH: begin
                     if (speedup_edge) begin
                         next_speed_state = HIGH; // stay at HIGH
-                    end else if (speeddown_edge) begin
+                    end else if (sppeddn_edge) begin
                         next_speed_state = NORMAL;
                     end else begin
                         next_speed_state = HIGH;
@@ -236,7 +236,7 @@ module control(
                 LOW: begin
                     if (speedup_edge) begin
                         next_speed_state = NORMAL;
-                    end else if (speeddown_edge) begin
+                    end else if (sppeddn_edge) begin
                         next_speed_state = LOW; // stay at LOW
                     end else begin
                         next_speed_state = LOW;
@@ -263,7 +263,7 @@ module control(
     //====================================================
     // Address Generation Logic
     //====================================================
-        reg [7:0]  addr_gen=0 ;
+        reg [8:0]  addr_gen=0 ;
         always@(posedge clk)
         begin
             if(counter >= 64'd400000000)begin
