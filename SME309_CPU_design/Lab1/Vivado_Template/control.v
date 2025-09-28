@@ -27,7 +27,7 @@ module control(
     reg  pause_prev, speedup_prev, speeddown_prev;
     wire pause_edge, speedup_edge, speeddown_edge;
   // Pause control
-    reg       paused     ;
+    reg       paused =0    ;
 //    reg       mem_select ; // 0 for instruction memory, 1 for data memory
 //    reg [6:0] mem_addr   ; // 7-bit address for each memory (128 words)
 
@@ -51,6 +51,14 @@ module control(
             speeddown_prev <= speeddown;
         end
 
+    //====================================================
+    // Pause Control Logic
+    //====================================================
+        always @(posedge clk) begin
+            if (pause_edge) begin
+                paused <= ~paused;  // 切换暂停状态
+            end
+        end
 
     //====================================================
     // STM: Speed State Machine
@@ -114,14 +122,15 @@ module control(
         reg [7:0]  addr_gen=0 ;
         always@(posedge clk)
         begin
-            if(counter >= 64'd4)begin
-                counter <= 0;
-                addr_gen <= addr_gen + 1;
+            if (!paused) begin
+                if(counter >= 64'd4)begin
+                    counter <= 0;
+                    addr_gen <= addr_gen + 1;
+                end
+                else begin
+                    counter <= counter + step;
+                end
             end
-            else begin
-                counter <= counter + step;
-            end
-        end
         assign addr =addr_gen;
 
 
