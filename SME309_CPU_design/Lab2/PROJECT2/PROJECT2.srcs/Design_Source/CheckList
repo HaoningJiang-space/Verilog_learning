@@ -1,0 +1,11 @@
+ Need to be checked :
+  1: Decoder.v ,PCSlogic  PCSrc与PCS的关系，ppt 16面
+                以及各个part的default部分 是否合理
+
+  2: ALU.v : B的取反或取反加一
+  3: Decoder.v  把俩个输出端口的reg 改成了wire 为了能在always块中统一赋值
+  4：端口 驱动电平改成1.8 而不是默认的3.3 ，因为第一次布线功耗爆表 考虑是LED切换太快导致功率飙升
+     LED切换太快可能是PC更新太快， PC来自ALU， 
+  5:在PC模块里采用了异步复位，导致RESET下降的时候触发，让PC提前一个时钟更新了，与老师提供的波形图比较提前了一个时钟
+    已更改为同步复位 in order to be the same as the waveform in PPT Lab2 ,change the method of reset
+  6:CondLogic:FlagWrite与Condex 与 Flags的关系
