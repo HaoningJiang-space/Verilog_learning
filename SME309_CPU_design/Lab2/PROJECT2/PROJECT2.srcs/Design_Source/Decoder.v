@@ -1,24 +1,47 @@
+//-------------------------------------------------------------
+// Module: Decoder
+// Description: Instruction Decoder for ARM CPU
+//              - Decodes ARM instructions into control signals
+//              - Implements Main Decoder and ALU Decoder
+//              - Supports Data Processing, Load/Store, Branch instructions
+//-------------------------------------------------------------
 module Decoder(
     input [31:0] Instr,
-	//Sent through Control Unit
+    // Sent through Control Unit
     output PCS,
-    output RegW, 
-    output MemW, 
-    output [1:0] FlagW,//reg -> wire  need to be checked
+    output RegW,
+    output MemW,
+    output [1:0] FlagW,
 
-    //Sent directly to datapath
+    // Sent directly to datapath
     output MemtoReg,
     output ALUSrc,
     output [1:0] ImmSrc,
     output [1:0] RegSrc,
-    output [1:0] ALUControl, //reg ->wire  need to be checked
+    output [1:0] ALUControl,
     output NoWrite
-    ); 
-    
-    wire [1:0]ALUOp ; 
-    wire Branch ;
+);
 
-    reg [1:0]ALUOp_r;
+//-------------------------------------------------------------
+// PARAMETER
+//-------------------------------------------------------------
+    // Instruction type encoding (Op field):
+    // 00: Data Processing
+    // 01: Load/Store
+    // 10: Branch
+
+    // ALUOp encoding:
+    // 00: SUB for memory address
+    // 10: ADD for memory address
+    // 11: Determined by instruction
+
+//-------------------------------------------------------------
+// WIRE&REG
+//-------------------------------------------------------------
+    wire [1:0] ALUOp;
+    wire Branch;
+
+    reg [1:0] ALUOp_r;
     reg Branch_r;
     reg MemtoReg_r;
     reg MemW_r;
@@ -30,13 +53,15 @@ module Decoder(
     reg [1:0] ALUControl_r;
     reg NoWrite_r;
 
-    //----------------------------------------
+    wire [1:0] Op = Instr[27:26];  // Instruction type field
 
-    wire [1:0]Op=Instr[27:26];
-   
-//-----------------    
-//Main Decoder
-//-----------------
+//-------------------------------------------------------------
+// MAIN LOGIC
+//-------------------------------------------------------------
+
+    //====================================================
+    // Main Decoder
+    //====================================================
     always@(*)begin
         case (Op)
             2'b00: begin // Data Processing (e.g., ADD, SUB, AND, OR)
@@ -160,11 +185,9 @@ module Decoder(
             end
         endcase
     end
-//-----------------
-
-
-//ALU Decoder
-//-----------------
+    //====================================================
+    // ALU Decoder
+    //====================================================
     always@(*)begin
         if(ALUOp[0]==1'b0)begin // Not Data Process
                if(ALUOp[1]==1'b0)begin 
@@ -250,11 +273,15 @@ module Decoder(
         end
     end
 
-//PC Logic
-assign PCS = (((Instr[15:12]==4'b1111)  &&  (RegW==1'b1)) || (Branch==1'b1)) ? 1'b1 : 1'b0; // Branch and Link instructions set PCS
-// If instruction is executed :PCSrc = PCS   need to be checked 2025/10/11
-// If instruction is not executed :PCSrc = 0
-//-----------------
+    //====================================================
+    // PC Source Logic
+    //====================================================
+    // Branch and Link instructions (or writes to R15) set PCS
+    assign PCS = (((Instr[15:12]==4'b1111) && (RegW==1'b1)) || (Branch==1'b1)) ? 1'b1 : 1'b0;
+
+    //====================================================
+    // Output Assignments
+    //====================================================
     assign ALUOp      = ALUOp_r;
     assign Branch     = Branch_r;
     assign MemtoReg   = MemtoReg_r;
@@ -267,5 +294,4 @@ assign PCS = (((Instr[15:12]==4'b1111)  &&  (RegW==1'b1)) || (Branch==1'b1)) ? 1
     assign ALUControl = ALUControl_r;
     assign NoWrite    = NoWrite_r;
 
-   
 endmodule

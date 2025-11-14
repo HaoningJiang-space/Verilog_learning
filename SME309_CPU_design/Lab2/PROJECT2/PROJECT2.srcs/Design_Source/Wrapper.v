@@ -1,52 +1,60 @@
+//-------------------------------------------------------------
+// Module: Wrapper
+// Description: ARM CPU Wrapper Module
+//              - Integrates ARM core with memory system
+//              - Manages instruction and data memory
+//              - Handles memory address decoding
+//              - Provides I/O interface (LEDs, 7-segment display)
+// Note: FOR SIMULATION. DO NOT SYNTHESIZE DIRECTLY
+//       (Used as a component in TOP.v for Synthesis)
+//-------------------------------------------------------------
 `timescale 1ns / 1ps
-//>>>>>>>>>>>> ******* FOR SIMULATION. DO NOT SYNTHESIZE THIS DIRECTLY (This is used as a component in TOP.v for Synthesis) ******* <<<<<<<<<<<<
 
 module Wrapper
 #(
-	parameter N_LEDs = 16,       // Number of LEDs displaying Result. LED(15 downto 15-N_LEDs+1). 16 by default
-	parameter N_DIPs = 7         // Number of DIPs. 16 by default	                             
+    parameter N_LEDs = 16,       // Number of LEDs displaying PC value
+    parameter N_DIPs = 7         // Number of DIP switches for memory address
 )
 (
-	input  [N_DIPs-1:0] DIP, 		 		// DIP switch inputs, used as a user definied memory address for checking memory content.
-	output reg [N_LEDs-1:0] LED, 	// LED light display. Display the value of program counter.
-	output reg [31:0] SEVENSEGHEX, 			// 7 Seg LED Display. The 32-bit value will appear as 8 Hex digits on the display. Used to display memory content.
-	input  RESET,							// Active high.
-	input  CLK								// Divided Clock from TOP.
-);                                             
+    input  [N_DIPs-1:0] DIP,         // DIP switch inputs for memory address
+    output reg [N_LEDs-1:0] LED,     // LED display for program counter
+    output reg [31:0] SEVENSEGHEX,   // 7-segment display for memory content
+    input  RESET,                    // Active high reset
+    input  CLK                       // Divided clock from TOP
+);
 
-//----------------------------------------------------------------
-// ARM signals
-//----------------------------------------------------------------
-wire[31:0] PC ;
-wire[31:0] Instr ;
-reg[31:0] ReadData ;
-wire MemWrite ;
-wire[31:0] ALUResult ;
-wire[31:0] WriteData ;
+//-------------------------------------------------------------
+// WIRE&REG
+//-------------------------------------------------------------
+    // ARM CPU signals
+    wire [31:0] PC;          // Program Counter
+    wire [31:0] Instr;       // Instruction from memory
+    reg  [31:0] ReadData;    // Data read from memory
+    wire MemWrite;           // Memory write enable
+    wire [31:0] ALUResult;   // ALU result (memory address)
+    wire [31:0] WriteData;   // Data to write to memory
 
-//----------------------------------------------------------------
-// Address Decode signals
-//---------------------------------------------------------------
-wire dec_DATA_CONST, dec_DATA_VAR;  // 'enable' signals from data memory address decoding
+    // Address Decode signals
+    wire dec_DATA_CONST, dec_DATA_VAR;  // Memory region enable signals
 
-//----------------------------------------------------------------
-// Memory read for IO signals
-//----------------------------------------------------------------
-wire [31:0] ReadData_IO;
+    // Memory read for I/O
+    wire [31:0] ReadData_IO; // Memory data for display
 
-//----------------------------------------------------------------
-// Memory declaration
-//-----------------------------------------------------------------
-reg [31:0] INSTR_MEM		[0:127]; // instruction memory
-reg [31:0] DATA_CONST_MEM	[0:127]; // data (constant) memory
-reg [31:0] DATA_VAR_MEM     [0:127]; // data (variable) memory
-integer i;
+    // Memory arrays
+    reg [31:0] INSTR_MEM     [0:127]; // Instruction memory (128 words)
+    reg [31:0] DATA_CONST_MEM[0:127]; // Constant data memory (128 words)
+    reg [31:0] DATA_VAR_MEM  [0:127]; // Variable data memory (128 words)
+    integer i;
 
 
-//----------------------------------------------------------------
-// Instruction Memory
-//----------------------------------------------------------------
-initial begin
+//-------------------------------------------------------------
+// MAIN LOGIC
+//-------------------------------------------------------------
+
+    //====================================================
+    // Instruction Memory Initialization
+    //====================================================
+    initial begin
 			INSTR_MEM[0] = 32'hE59F1204; 
 			INSTR_MEM[1] = 32'hE59F2204; 
 			INSTR_MEM[2] = 32'hE59F31F0; 
@@ -111,10 +119,10 @@ initial begin
 			end
 end
 
-//----------------------------------------------------------------
-// Data (Constant) Memory
-//----------------------------------------------------------------
-initial begin
+    //====================================================
+    // Data (Constant) Memory Initialization
+    //====================================================
+    initial begin
 			DATA_CONST_MEM[0] = 32'h00000810; 
 			DATA_CONST_MEM[1] = 32'h00000820; 
 			DATA_CONST_MEM[2] = 32'h00000830; 
@@ -127,86 +135,90 @@ initial begin
 			end
 end
 
-//----------------------------------------------------------------
-// Data (Variable) Memory
-//----------------------------------------------------------------
-initial begin
+    //====================================================
+    // Data (Variable) Memory Initialization
+    //====================================================
+    initial begin
             for(i = 0; i < 128; i = i+1) begin 
 				DATA_VAR_MEM[i] = 32'h0; 
 			end
 end
 
 
-//----------------------------------------------------------------
-// ARM port map
-//----------------------------------------------------------------
-ARM ARM1(
-	.CLK(CLK),      
-	.Reset(RESET),
-	.Instr(Instr),
-	.ReadData(ReadData),
+    //====================================================
+    // ARM CPU Instantiation
+    //====================================================
+    ARM ARM1(
+        .CLK(CLK),
+        .Reset(RESET),
+        .Instr(Instr),
+        .ReadData(ReadData),
+        .MemWrite(MemWrite),
+        .PC(PC),
+        .ALUResult(ALUResult),
+        .WriteData(WriteData)
+    );
 
-	.MemWrite(MemWrite),
-	.PC(PC),
-	.ALUResult(ALUResult),
-	.WriteData(WriteData) 
-);
+    //====================================================
+    // Data Memory Address Decoding
+    //====================================================
+    // Memory map:
+    // 0x00000200 - 0x000003FC: Constant data memory
+    // 0x00000800 - 0x000009FC: Variable data memory
+    assign dec_DATA_CONST = (ALUResult >= 32'h00000200 && ALUResult <= 32'h000003FC) ? 1'b1 : 1'b0;
+    assign dec_DATA_VAR   = (ALUResult >= 32'h00000800 && ALUResult <= 32'h000009FC) ? 1'b1 : 1'b0;
 
-//----------------------------------------------------------------
-// Data memory address decoding
-//----------------------------------------------------------------
-assign dec_DATA_CONST		= (ALUResult >= 32'h00000200 && ALUResult <= 32'h000003FC) ? 1'b1 : 1'b0;
-assign dec_DATA_VAR			= (ALUResult >= 32'h00000800 && ALUResult <= 32'h000009FC) ? 1'b1 : 1'b0;
+    //====================================================
+    // Data Memory Read (for CPU)
+    //====================================================
+    always@( * ) begin
+        if (dec_DATA_VAR)
+            ReadData <= DATA_VAR_MEM[ALUResult[8:2]];
+        else if (dec_DATA_CONST)
+            ReadData <= DATA_CONST_MEM[ALUResult[8:2]];
+        else
+            ReadData <= 32'h0;
+    end
 
-//----------------------------------------------------------------
-// Data memory read 1
-//----------------------------------------------------------------
-always@( * ) begin
-if (dec_DATA_VAR)
-	ReadData <= DATA_VAR_MEM[ALUResult[8:2]] ; 
-else if (dec_DATA_CONST)
-	ReadData <= DATA_CONST_MEM[ALUResult[8:2]] ; 	
-else
-	ReadData <= 32'h0 ; 
-end
+    //====================================================
+    // Data Memory Read (for Display)
+    //====================================================
+    assign ReadData_IO = DATA_VAR_MEM[DIP[6:0]]; // Used for 7-segment display
 
-//----------------------------------------------------------------
-// Data memory read 2 
-//----------------------------------------------------------------
-assign ReadData_IO = DATA_VAR_MEM[DIP[6:0]];//Used for SEVENSEG Display
- 
-//----------------------------------------------------------------
-// Data Memory write
-//----------------------------------------------------------------
-always@(posedge CLK) begin
-    if( MemWrite && dec_DATA_VAR ) 
-        DATA_VAR_MEM[ALUResult[8:2]] <= WriteData ;
-end
+    //====================================================
+    // Data Memory Write
+    //====================================================
+    always@(posedge CLK) begin
+        if( MemWrite && dec_DATA_VAR )
+            DATA_VAR_MEM[ALUResult[8:2]] <= WriteData;
+    end
 
-//----------------------------------------------------------------
-// Instruction memory read
-//----------------------------------------------------------------
-assign Instr = ( (PC >= 32'h00000000) && (PC <= 32'h000001FC) ) ? // To check if address is in the valid range, assuming 128 word memory. Also helps minimize warnings
-                 INSTR_MEM[PC[8:2]] : 32'h00000000 ; //Every time plus 4 , so ignore the lowest 2 bits
+    //====================================================
+    // Instruction Memory Read
+    //====================================================
+    // Valid address range: 0x00000000 - 0x000001FC (128 words)
+    // PC increments by 4, so use bits [8:2] for indexing
+    assign Instr = ( (PC >= 32'h00000000) && (PC <= 32'h000001FC) ) ?
+                     INSTR_MEM[PC[8:2]] : 32'h00000000;
 
-//----------------------------------------------------------------
-// LED light - display PC value
-//----------------------------------------------------------------
-always@(posedge CLK or posedge RESET) begin
-    if(RESET)
-        LED <= 16'b0 ;
-    else 
-        LED <= PC ;
-end
+    //====================================================
+    // LED Display - Program Counter Value
+    //====================================================
+    always@(posedge CLK or posedge RESET) begin
+        if(RESET)
+            LED <= 16'b0;
+        else
+            LED <= PC;
+    end
 
-//----------------------------------------------------------------
-// SevenSeg LED - display memory content
-//----------------------------------------------------------------
-always @(posedge CLK or posedge RESET) begin
-	if (RESET)
-		SEVENSEGHEX <= 32'b0;
-	else
-		SEVENSEGHEX <= ReadData_IO;
-end
+    //====================================================
+    // Seven-Segment Display - Memory Content
+    //====================================================
+    always @(posedge CLK or posedge RESET) begin
+        if (RESET)
+            SEVENSEGHEX <= 32'b0;
+        else
+            SEVENSEGHEX <= ReadData_IO;
+    end
 
 endmodule
